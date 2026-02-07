@@ -29,6 +29,24 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 });
 
+// Mobile menu toggle
+const menuToggle = document.querySelector('.menu-toggle');
+const navLinks = document.querySelector('.nav-links');
+
+if (menuToggle && navLinks) {
+  menuToggle.addEventListener('click', () => {
+    const isOpen = navLinks.classList.toggle('active');
+    menuToggle.setAttribute('aria-expanded', String(isOpen));
+  });
+
+  navLinks.querySelectorAll('a').forEach(link => {
+    link.addEventListener('click', () => {
+      navLinks.classList.remove('active');
+      menuToggle.setAttribute('aria-expanded', 'false');
+    });
+  });
+}
+
 // Resume download function
 function downloadResume() {
   // Create a simple resume content (you can replace this with actual PDF generation)
@@ -243,10 +261,10 @@ window.addEventListener('scroll', () => {
 function animateSkillBars() {
   const skillBars = document.querySelectorAll('.skill-bar');
   skillBars.forEach(bar => {
-    const width = bar.style.width;
+    const level = bar.dataset.level || '0';
     bar.style.width = '0%';
     setTimeout(() => {
-      bar.style.width = width;
+      bar.style.width = `${level}%`;
     }, 500);
   });
 }
@@ -308,37 +326,3 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 });
 
-// Mobile menu toggle (for future mobile navigation)
-function toggleMobileMenu() {
-  const navLinks = document.querySelector('.nav-links');
-  navLinks.classList.toggle('active');
-}
-
-// Add CSS for mobile menu
-const mobileMenuStyles = `
-  @media (max-width: 768px) {
-    .nav-links {
-      position: fixed;
-      top: 70px;
-      left: 0;
-      right: 0;
-      background: var(--card);
-      flex-direction: column;
-      padding: 2rem;
-      box-shadow: var(--shadow);
-      transform: translateY(-100%);
-      opacity: 0;
-      transition: all 0.3s ease;
-    }
-    
-    .nav-links.active {
-      transform: translateY(0);
-      opacity: 1;
-    }
-  }
-`;
-
-// Inject mobile menu styles
-const styleSheet = document.createElement('style');
-styleSheet.textContent = mobileMenuStyles;
-document.head.appendChild(styleSheet);
